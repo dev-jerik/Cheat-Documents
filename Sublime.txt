@@ -1,0 +1,31 @@
+######################################
+##   Sublime Version 3 20190906     ##
+######################################
+## - comments
+
+Navigation/Goto Anywhere 
+
+Ctrl + P	Quick-open files by name
+Ctrl + ;	Goto word in current file
+Ctrl + G	Goto line in current file
+
+General
+Ctrl + ⇧ + P	Command prompt 	##command prompt of sublime, not on windows.
+Ctrl + KB	Toggle side bar
+
+Find/Replace
+Ctrl + F	Find
+Ctrl + H	Replace
+Ctrl + ⇧ + F	Find in files
+
+Split window
+Alt + ⇧ + 1	Revert view to single column
+Alt + ⇧ + 2	Split view into two columns
+Alt + ⇧ + 3	Split view into three columns
+Alt + ⇧ + 4	Split view into four columns
+Alt + ⇧ + 5	Set view to grid (4 groups)
+Alt + ⇧ + 8	Split view into two rows
+
+Text manipulation
+Ctrl + KU	Transform to Uppercase
+Ctrl + KL	Transform to Lowercase
