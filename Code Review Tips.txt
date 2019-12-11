@@ -1,0 +1,65 @@
+
+How to code review
+1. read redmine specs and make sure it follows the specs
+Process to check
+1. database
+  - make sure to also add it to clean_up_setup or clean_up_txn
+  - add it to clean_up if it is the default, for easier use
+2. domain
+  - check annotations
+  - not null message
+  - check datetime, should be joda in getmethod
+  - if the field is object make sure to add additional annotation @Valid
+3. dao and Service
+  - @Repository
+  - make sure to follow coding standard / naming standard
+  - make sure names are easy to understand
+  - check class name and method names
+  - setups doesnt have delete
+  - transactions sometimes can be editable and sometimes its not  
+  - train wreck maximum is 2 dots
+  - create variables for codes that are repeated multiple times
+  - string query should have escape special characters  
+  - use query.setparameter only for wrapper class(*not primitive classes that we didnt create)
+  - use setInteger, or setLong for wrapper classes
+  - for txn that have manipulates database, it should have auditlog
+  - validateSave should only validate the fields inputed by the user
+  - validateFinal should validate all required, programmer inputed included
+4. service
+  - make sure to call the dao version of methods
+  - @Service  
+5. models
+  - if the domain is header/main object, it should extends CptiLdm
+  - for special object like Profile, which need to have special method 
+    such as getCorporate and getIndividual it should extends CptiModel
+  - detail class usually do not extend CptiBaseClass
+  - detail class models does not have main model, and it has list model
+  - make sure that fields that is used on component should have models
+6. data provider
+  - 
+7. data table column generator
+8. pages
+  - title
+  - check the labels used
+  - check labels and component name
+  - check if the page validates properly
+  - edit page should use evict() after getobject() and before you validate onsubmit
+  - delete reuses the view page
+9. panels
+  - 
+10. report
+  - new object should have a new report
+11. labels.properties 
+  - object name
+  - object name setup
+  - make sure that already used "string" should just refer to other labels  
+
+Others 
+- indention
+- should be easy to understand
+- very long process should be put in method, even if it is only used once, just for readability
+
+- git log --grep="any text" 
+  - this would search for the log that contains the text in all the commits
+- git log --author="any author"
+  - show all the commits of the author
