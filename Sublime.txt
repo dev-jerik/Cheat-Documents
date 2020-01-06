@@ -29,3 +29,5 @@ Alt + ⇧ + 8	Split view into two rows
 Text manipulation
 Ctrl + KU	Transform to Uppercase
 Ctrl + KL	Transform to Lowercase
+
+test
