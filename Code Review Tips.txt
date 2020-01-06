@@ -1,5 +1,3 @@
-Tipsssss...
-
 How to code review
 1. read redmine specs and make sure it follows the specs
 Process to check
