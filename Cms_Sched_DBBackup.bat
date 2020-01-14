@@ -2,7 +2,7 @@
 @echo off
 echo CMS Database Backup schedule started.
 :: Set some variables
-set bkupdir=C:\cpti_resources\CMS_DB_Backup\
+set bkupdir=C:\cpti_resources\CMS_Backup\
 set mysqldir="C:\Program Files\MySQL\MySQL Server 5.7\"
 set logdir=%bkupdir%Logs\
 set transactionsdir=%bkupdir%TRANSACTIONS\
