@@ -1,0 +1,8 @@
+------------------------ List of commands that is usable for me. ----------------------------------
+
+## - means comment on my notes. This is not part of the syntax of the batch file.
+
+echo.								 ## Print an empty line.
+@echo off							 ## Do not display echo command in the console.
+set /p CMSDB=Enter backup name :  	 ## Ask an input from the user and assigned it to CMSDB variable.
+copy restore1.txt + restore2.txt   fast_%CMSDB%.sql ## copy two file in another file.
