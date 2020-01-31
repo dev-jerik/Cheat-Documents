@@ -42,6 +42,7 @@ if not exist %fulldir% (
 :: Get the date base on this format "MM/dd/yyyy"
 :: source: https://stackoverflow.com/questions/19131029/how-to-get-date-in-bat-file
 FOR /f "usebackq" %%i IN (`PowerShell ^(Get-Date^).ToString^('MM/dd/yyyy'^)`) DO (
+ set dateNow=%%i
  for /F "tokens=1-3 delims=/ " %%i in ("%%i") do (
 	set mm=%%i
 	set dd=%%j
@@ -61,7 +62,7 @@ if "%endtime%"=="1" goto END
 
 :: Create the filename suffix
 set fn=_%yy%%mm%%dd%_%hh%%ii%
-echo %fn%
+set datefn=_%yy%%mm%%dd%
 
 :: Write to the log file
 echo Beginning MySQLDump Process.
@@ -77,11 +78,24 @@ echo Backing up TRANSACTIONS >> %logdir%LOG%fn%.txt
 %mysqldir%bin\mysqldump --user=%dbuser% --password=%dbpass% %dbname%  adjustment adv_credit adv_credit_adjustment adv_credit_allocation adv_credit_allocation_adv_credit_type_link adv_credit_allocation_profile_link adv_credit_allocation_unit_link aor_number bill bill_invoice_type_link bulk_txn_detail bulk_txn_header calendar_event club_stats club_stats_detailed condo_dues_txn condo_dues_txn_unit_link credit_memo day_end day_end_detail debit_memo email_blast email_blast_detail facility_user folio_txn invoice late_charge late_charge_profile_link late_charge_unit_link multiple_adv_credit multiple_adv_credit_profile_link multiple_bill multiple_bill_invoice_type_link multiple_bill_profile_link multiple_bill_unit_link multiple_invoice multiple_invoice_profile_link multiple_invoice_unit_link or_number other_payment payment payment_detail period_end pos_txn rec_charge_txn rec_charge_txn_profile_link reservation reservation_adv_credit_link reservation_calendar_event_link reservation_charge reversal_history setup_audit_log system_task system_audit_log transfer_history txn_audit_log upload upload_detail bill_generation bill_generation_detail post_folio_to_billing post_folio_to_billing_folio_link forfeit_adv_credits forfeit_adv_credits_adv_credit_link -f --single-transaction --skip-add-locks > %bkupdir%TRANSACTIONS\CMS_TransBkup_%fn%.sql 2>>%logdir%LOG%fn%.txt
 
 
+:: Get day of the week for filename suffix.
+for /f %%d in ('"powershell (Get-Date -Format 'ddd').ToUpper()"') do set dow=%%d
+
 :: Run mysqldump
 echo Backing up FULL database
 echo Backing up FULL database >> %logdir%LOG%fn%.txt
 REM %mysqldir%\bin\mysqldump --user=%dbuser% --password=%dbpass% LMMS --skip-opt --quote-names --allow-keywords --complete-insert --single-transaction > %bkupdir%FULL\CMS_FullBackup_%fn%.sql
-%mysqldir%bin\mysqldump --user=%dbuser% --password=%dbpass% %dbname% -f --single-transaction --skip-add-locks > %fulldir%CMS_FullBackup_%fn%.sql 2>>%logdir%LOG%fn%.txt
+%mysqldir%bin\mysqldump --user=%dbuser% --password=%dbpass% %dbname% -f --single-transaction --skip-add-locks > %fulldir%CMS_FullBackup_%dow%.sql 2>>%logdir%LOG%fn%.txt
+
+
+:: Get the last date of the month
+for /f %%d in ('"powershell ((get-date).addmonths(1)).adddays(-(get-date ((get-date).addmonths(1)) -format dd)).toString('MM/dd/yyyy') "') do set lastDateOfTheMonth=%%d
+:: Create a backup copy of cms for the end of the month if today is the last day of the month.
+if %lastDateOfTheMonth% EQU %dateNow% (
+	echo Create a backup copy of cms database for the month of %lastDateOfTheMonth%
+	echo Create a backup copy of cms database for the month of %lastDateOfTheMonth% >> %logdir%LOG%fn%.txt
+	echo %fulldir%CMS_FullBackup_%dow%.sql > %fulldir%CMS_FullBackup_%datefn%.sql
+) 
 
 echo Done...
 echo Done... >> %logdir%LOG%fn%.txt
@@ -104,4 +118,4 @@ echo End Time = %yy%-%mm%-%dd% %hh%:%ii%:%ss%
 echo End Time = %yy%-%mm%-%dd% %hh%:%ii%:%ss% >> %logdir%LOG%fn%.txt
 echo. >> %logdir%LOG%fn%.txt
 
-rem pause
+REM pause
